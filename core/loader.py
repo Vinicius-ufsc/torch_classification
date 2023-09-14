@@ -78,35 +78,6 @@ def make_transformer(aug_hyps, job_type='train'):
         # cv2.BORDER_REPLICATE
         # cv2.BORDER_WRAP
 
-        
-
-        # A.Resize(width=input_size[0], height=input_size[1], p = 1),
-        # # realiza o resize novamente para 416,416.
-
-        # Re escala a imagem aleatoriamente, zoom ou afasta.
-        # A.RandomScale(scale_limit=(-0.5,0.5), p=1),
-
-        # Corta a imagem aleatoriamente, com o tamanho especificado.
-        # A.RandomCrop(width=np.random.randint(380,416),
-        #   height=np.random.randint(200,350), p = 0.6),
-    
-        # Modifica o brilho e contraste da imagem aleatoriamente.
-        # A.RandomBrightnessContrast(brightness_limit=0.2, contrast_limit=0.2, p=0.7),
-
-        # Rotaciona aleatoriamente entre -rotate_limit e + rotate_limit.
-        # A.ShiftScaleRotate(shift_limit=0.0625, scale_limit=0,
-        #   rotate_limit=25,p = 0.5, border_mode=cv.BORDER_CONSTANT),
-
-         # Modifica o gamma aleatoriamente.
-        # A.RandomGamma(gamma_limit=(95, 110), p=0.7),
-        # A.Blur(blur_limit=6, p=0.15), # Borra a imagem.
-        # adiciona offsets aos valores da imagem, diferente para cada canal.
-        # A.RGBShift(r_shift_limit=0.05, g_shift_limit=0.05, b_shift_limit=0.05, p=0.2),
-        # A.GaussNoise(var_limit=(0.005, 0.005) ,p = 0.1), # adiciona ruido gaussiano.
-         # corta pedaços aleatórios da imagem.
-        # A.Cutout(num_holes = 6, max_h_size = 30, max_w_size = 30, p=0.5),
-
-
     ], bbox_params=A.BboxParams(format='yolo', min_area=100, min_visibility=0.5,
                                 label_fields=['class_labels'], check_each_transform=False))
 

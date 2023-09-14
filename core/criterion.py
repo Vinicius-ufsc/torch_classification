@@ -43,19 +43,3 @@ def make_criterion(job_type='Multiclass Classification', weight=None):
     ), 'no supported criterion for the given job_type.'
 
     return loss_functions[job_type]
-
-""" 
-import torch
-
-if __name__ == '__main__':
-    loss = criterion(job_type = 'Multi-Label Classification', weight=None)
-
-    logits = torch.tensor([[1.0, -2.0, 0.5], [2.0, 0.0, -1.0]])
-    targets = torch.tensor([[1.0, 0.0, 1.0], [0.0, 1.0, 1.0]])
-
-    print(loss(logits, targets))
-
-    loss = criterion(job_type = 'Multi-Label Classification', weight=torch.tensor([1.0,0.5,0.2]))
-
-    print(loss(logits, targets))
-"""
