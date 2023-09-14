@@ -1,15 +1,27 @@
-## <div align="center">PyTorch Training Pipeline</div> 
+## <div align="center">PyTorch Training Pipeline (WIP)</div> 
+
+This project is a multiclass and multilabel classification training pipeline<br>
+logs are saved in W&B 
+
+![Example](/doc/cmd_example.png)
 
 <details open>
 
 <summary>Install</summary><br>  
+
+```bash
 conda create --name torch_pipe pip python==3.10.6
+conda activate torch_pipe
+cd torch_classification
 pip install -r requirements.txt
+```
 
 </details>
 
 <details open>
 <summary>Work checklist</summary><br>  
+
+- [ ] Project Documentation
 
 - [X] Dataloader
     - [X] CSV
@@ -86,8 +98,6 @@ pip install -r requirements.txt
 
 - [ ] Alerts
 
-- [ ] Usage Documentation
-
 </details>
 
 <details open>
@@ -97,3 +107,5 @@ pip install -r requirements.txt
 ```bash
 python train.py --logging 20 --hyps hyps_none --arch architecture --data data --mode offline --device cuda --epochs 2 --batch_size 2 --patience 5 --save_weights False
 ```
+
+feel free to contribute to this repository.
