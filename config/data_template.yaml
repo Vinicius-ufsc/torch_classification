@@ -1,0 +1,20 @@
+# Example usage: python train.py --data my_data.yaml
+
+# parent
+# ├──datasets
+#    └── my_data
+
+# Dataset directory and data split cvs files. 
+path : C:\your_data 
+# train cvs file (relative to 'path')
+train: C:\your_data\train.csv
+# val cvs file (relative to 'path')
+val: C:\your_data\val.csv
+# test cvs file (relative to 'path')
+test: C:\your_data\test.csv 
+
+# Classes
+names:
+  0: A
+  1: B
+  2: C

@@ -1,0 +1,22 @@
+# wandb account key for logging.
+key: your_key_to_wandb
+# project name.
+project : your_project_name
+# run name.
+name : your_run_name
+#
+entity :
+#
+group :
+#
+job_type : job_type
+# A list of strings.
+tags : []
+# A longer description of the run.
+notes :
+# Save locally and Upload weights to the wandb page.
+upload_weights : False
+# Save confusion matrix and other files.
+analytic_files : True
+# Save Tables for error analysis.
+error_analysis : True

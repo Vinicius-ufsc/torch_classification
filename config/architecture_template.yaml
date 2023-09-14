@@ -1,0 +1,32 @@
+# model architecture
+
+# check out the link below to choose the best architecture 
+# https://pytorch.org/vision/main/models.html
+
+# tips:
+# efficientnet_b2 best with =< (9.1M)
+
+# out_features == num of classes
+
+architecture : resnet18 # efficientnet_b2
+# use DEFAULT to get the best weights available in torchvision for the specific architecture.
+weights : None # if None will not load any weights.
+out_features : 3
+
+# criterion parameters
+# auto choose criterion based on classification problem type.
+# [Binary Classification, Multiclass Classification, Multi-Label Classification]
+# [binary, multiclass, multilabel]
+
+job_type : multilabel
+
+# TODO
+# kind of transfer learning
+# * good if you have large amounts of data (may result in best performance).
+# scratch - train all models parameters. 
+# * good if you have small amounts of data.
+# feature extraction - train only the top head (classifier).
+# * good if your pre trained model was trained in the exact/similar problem you are working.
+# fine tuning - froze the base and train the middle/end and the top head parameters. 
+transfer_learning : 'scratch' # [scratch, feature extraction, fine tuning]
+

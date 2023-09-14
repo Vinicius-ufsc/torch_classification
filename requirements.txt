@@ -1,0 +1,14 @@
+# torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+
+Pillow
+pandas
+py-cpuinfo
+tqdm
+torchmetrics
+albumentations
+opencv-python
+numpy
+torch-summary
+mlxtend
+wandb
+py-cpuinfo
