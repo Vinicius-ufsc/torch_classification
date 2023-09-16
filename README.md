@@ -58,7 +58,7 @@ To get started, follow these steps:
         |-----------------------|------------|
         |train\class1_image1.png |0 |
         |train\class1_image2.png |0 |
-        |train\class2.image1 |1 |
+        |train\class2.image1.png |1 |
         |... |... |
 
     - here is an example of dataset folder structure:
