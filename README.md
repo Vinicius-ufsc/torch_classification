@@ -63,22 +63,25 @@ To get started, follow these steps:
 
     - here is an example of dataset folder structure:
 
-        ```bash 
-        ├── dataset
-        │   ├── train
-        │		├── class1
-        │       	└── image1.png
-        │			└── image2.png
-        │		    └── ...
-        │		├── class2
-        │       	└── image1.png
-        │			└── image2.png
-        │		    └── ...
-        │   ├── val
-        │       └── image1.png
-        │		└── image2.png
-        │		└── ...
-        ```
+	```plaintext 
+	├── dataset
+	│   ├── train
+	│   │   ├── class1
+	│   │   │   ├── image1.png
+	│   │   │   ├── image2.png
+	│   │   │   └── ...
+	│   │   ├── class2
+	│   │   │   ├── image1.png
+	│   │   │   ├── image2.png
+	│   │   │   └── ...
+  	│   │   ...
+	│   ├── val
+ 	│   │   ├── class1
+	│   │   │   ├── image1.png
+	│   │   │   ├── image2.png
+	│   │   │   └── ...
+ 	│   │   ...
+```
 
 - Start training your model using the provided script (example):
 
