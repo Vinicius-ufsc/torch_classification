@@ -12,6 +12,8 @@ def return_weights(csv_file, job_type, device='cuda'):
         match job_type:
                 case 'multiclass':
                         # ! TODO corrigir para o caso multiclass.
+                        print('warning: check implementation for multiclass')
+                        print('! TODO fix for multiclass')
                         labels = data.iloc[:, 1].to_numpy()
 
                         counter = Counter(labels)
