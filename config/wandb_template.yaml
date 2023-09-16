@@ -1,18 +1,20 @@
-# wandb account key for logging.
+# copy your wandb account key for logging.
 key: your_key_to_wandb
-# project name.
+# give your project a name.
 project : your_project_name
 # run name.
 name : your_run_name
-#
+# (optional)
 entity :
-#
+# (optional)
 group :
-#
+# (optional)
 job_type : job_type
 # A list of strings.
+# (optional)
 tags : []
 # A longer description of the run.
+# (optional)
 notes :
 # Save locally and Upload weights to the wandb page.
 upload_weights : False
