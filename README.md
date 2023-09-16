@@ -81,7 +81,7 @@ To get started, follow these steps:
 	│   │   │   ├── image2.png
 	│   │   │   └── ...
  	│   │   ...
-```
+	```
 
 - Start training your model using the provided script (example):
 
