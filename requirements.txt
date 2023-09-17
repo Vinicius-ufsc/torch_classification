@@ -1,5 +1,10 @@
 # torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
 
+# Usage: pip install -r requirements.txt
+
+--find-links https://download.pytorch.org/whl/cu118/torch_stable.html
+torch==2.0.1+cu118
+
 Pillow
 pandas
 py-cpuinfo
