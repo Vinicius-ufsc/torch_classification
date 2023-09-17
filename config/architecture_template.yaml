@@ -30,3 +30,8 @@ job_type : multilabel
 # fine tuning - froze the base and train the middle/end and the top head parameters. 
 transfer_learning : 'scratch' # [scratch, feature extraction, fine tuning]
 
+# CLIP classifier layer (if you choose to fine-tune CLIP for classification)
+
+# variable name for templates.
+templates : 'simple_template'
+freeze_encoder : False
