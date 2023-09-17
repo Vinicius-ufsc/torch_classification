@@ -17,3 +17,6 @@ torch-summary
 mlxtend
 wandb
 py-cpuinfo
+
+tfy
+regex
