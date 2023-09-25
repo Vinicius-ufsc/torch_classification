@@ -50,6 +50,8 @@ To get started, follow these steps:
 
 ## Usage
 
+### Train 
+
 - Configure your network architecture, data settings, and hyperparameters in the respective YAML files.
 
     - The `csv files` should be in the following format:
@@ -102,9 +104,9 @@ To get started, follow these steps:
 
 - Start training your model using the provided script (example):
 
-    ```bash
-    python train.py --data data --arch architecture --hyps hyps_none
-    ```
+	```bash
+	python train.py --data data --arch architecture --hyps hyps_none
+	```
 
 Refer to the parameter descriptions within the script for more details on each option.
 
@@ -131,7 +133,25 @@ Refer to the parameter descriptions within the script for more details on each o
 | --top_k             | K for top_k precision (e.g., if 2, will use the top 2 confidence classes to compute confusion) |
 | --num_samples       | Number of samples to calculate precision@K             |
 | --balance_weights   | Set custom weights for loss calculation based on class imbalance |
-| --force_clip		  | force clip pre-processor (for clip models only) |
+| --force_clip		  | Force clip pre-processor (for clip models only) |
+
+### Zero-shot classification
+
+- Configure your network architecture and class settings (zero_shot_template), in the respective YAML files.
+
+- Run the provided script (example)
+
+```bash
+python zero_shot --clip_path ViT-L-14-336px.pt 
+```
+
+| Parameter          | Description                      |
+| ------------------ | -------------------------------- |
+| --clip_path        | Pre-trained clip model path      |
+| --name             | Model name                       |
+| --yaml_path        | .yaml templates file path        |
+| --freeze_encoder   | Freeze encoder weights (clip)    |
+| --device           | Device to use for training       |
 
 ## Project Status and Contributions
 
