@@ -11,6 +11,7 @@ pickle/
 .vscode/
 temp/
 notes/
+zero_shot_models/
 
 architecture.yaml
 data.yaml
