@@ -12,11 +12,12 @@ from utils.metrics import ComputeMetrics
 from utils.early_stopping import EarlyStopping
 from utils.scheduler import get_scheduler
 from utils.wandb_logging import wandb_log, wandb_log_scalar
-from utils.save_model import PerformanceTracker
+from utils.tracker import PerformanceTracker
 from utils.check_dir import count_folders_by_name
 from utils.txt_messages import PIPE_TXT, WHITE_TXT, GOLDEN_TXT ,CLEAR_TXT
 from utils.val import val
 
+os.environ["WANDB_SILENT"]="true"
 
 # https://towardsdatascience.com/optimize-pytorch-performance-for-speed-and-memory-efficiency-2022-84f453916ea6
 
