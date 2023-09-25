@@ -124,12 +124,13 @@ class DataloaderCsv(Dataset):
     """
 
     def __init__(self, csv_file: str, root_dir: str,  transform=None, 
-                 job_type='multiclass'):
+                 job_type='multiclass', is_clip = False):
 
         self.data = pd.read_csv(csv_file) 
         self.root_dir = Path(root_dir)
         self.transform = transform
         self.job_type = job_type
+        self.is_clip = is_clip
 
     def __len__(self):
         return len(self.data)
@@ -175,28 +176,33 @@ class DataloaderCsv(Dataset):
 
         logger.debug('image | type: %s, dtype: %s, size: %s, max: #s',  \
                      type(image), image.dtype, image.size, [image[..., 0].max(),image[..., 1].max(),image[..., 2].max()])
+        
 
-        # * apply transforms (CPU).
-        # ! TODO measure difference between CPU and GPU time for transformation.
-        # ! (possible to transform into GPU?)
-        # ! albumentations.augmentations.transforms.transforms.ToTensorV2
-        if self.transform:
-            # apply albumentations (transformations in the image and it's labels (bbox, id))
-            aug_data = self.transform(
-                image=image, bboxes=[bbox], class_labels=[label])
+        if not self.is_clip: 
+            # * apply transforms (CPU).
+            # ! TODO measure difference between CPU and GPU time for transformation.
+            # ! (possible to transform into GPU?)
+            # ! albumentations.augmentations.transforms.transforms.ToTensorV2
+            if self.transform:
+                # apply albumentations (transformations in the image and it's labels (bbox, id))
+                aug_data = self.transform(
+                    image=image, bboxes=[bbox], class_labels=[label])
 
-            # results of transformation.
-            image = aug_data['image']
-            bbox = aug_data['bboxes']
+                # results of transformation.
+                image = aug_data['image']
+                bbox = aug_data['bboxes']
 
-        # channels, width, height.
-        # torch.tensor always copies data while torch.as_tensor() avoids copying data if possible.
-        image = torch.as_tensor(image, dtype=torch.float32).permute(
-            2, 0, 1)  # .to(self.device)
+            # channels, width, height.
+            # torch.tensor always copies data while torch.as_tensor() avoids copying data if possible.
+            image = torch.as_tensor(image, dtype=torch.float32).permute(
+                2, 0, 1)  # .to(self.device)
+            
+        else:
 
+            from PIL import Image
+            image = Image.open(img_path)
+            image = self.transform(image)
 
-        #logger.debug(f'image: type: {type(image)} dtype: {image.dtype}, size: {image.size}')
-        #logger.debug(f'label: type: {type(label)} dtype: {label.dtype}, size: {label.size}')
         logger.debug('image | type: %s, dtype: %s, size: %s', type(image), image.dtype, image.size)
         logger.debug('label | type: %s, dtype: %s, size: %s', type(label), label.dtype, label.size)
 
@@ -206,12 +212,13 @@ class DataloaderCsv(Dataset):
                 'name': image_name}
 
 def batch_loader(csv_file, root_dir, transform=None, batch_size=16,
-                 num_workers=1, shuffle=False, generator=None, worker_init_fn=None, job_type = 'multiclass'):
+                 num_workers=1, shuffle=False, generator=None, worker_init_fn=None, 
+                 job_type = 'multiclass', is_clip = False):
 
     """Integrate the loader with the Dataloader for batch processing"""
 
     loader = DataloaderCsv(
-        csv_file=csv_file, root_dir=root_dir,  transform=transform, job_type=job_type)
+        csv_file=csv_file, root_dir=root_dir,  transform=transform, job_type=job_type, is_clip = is_clip)
 
     # persistent_workers: creating the workers is expensive, this will keep the workers, 
     # disadvantage: will use more RAM.
