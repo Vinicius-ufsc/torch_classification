@@ -141,9 +141,9 @@ Refer to the parameter descriptions within the script for more details on each o
 
 - Run the provided script (example)
 
-```bash
-python zero_shot --clip_path ViT-L-14-336px.pt 
-```
+	```bash
+	python zero_shot --clip_path ViT-L-14-336px.pt 
+	```
 
 | Parameter          | Description                      |
 | ------------------ | -------------------------------- |
