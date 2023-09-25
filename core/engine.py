@@ -15,7 +15,9 @@ from utils.wandb_logging import wandb_log, wandb_log_scalar
 from utils.tracker import PerformanceTracker
 from utils.check_dir import count_folders_by_name
 from utils.txt_messages import PIPE_TXT, WHITE_TXT, GOLDEN_TXT ,CLEAR_TXT
+from utils.common import mkdir
 from utils.val import val
+
 
 os.environ["WANDB_SILENT"]="true"
 
@@ -63,6 +65,7 @@ def train(conf: dict, opt, hyps : dict, arch : dict, wandb_conf : dict, state : 
         model, criterion, optimizer, loader = conf['model'], conf['criterion'], conf['optimizer'], conf['train_loader']
 
         # * get run name.
+        mkdir('runs')
         run_name = wandb_conf['name']
         run_name =  run_name + '_' + \
             str(count_folders_by_name(directory = 'runs', folder_name = run_name))
