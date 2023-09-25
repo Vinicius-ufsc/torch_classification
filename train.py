@@ -4,6 +4,7 @@ from core.criterion import make_criterion
 from core.optimizer import make_optimizer
 from core.engine import train
 from utils.balance_weights import return_weights
+from clip.clip import available_models as clip_available_models
 from utils.txt_messages import PIPE_TXT, WHITE_TXT, CLEAR_TXT
 
 from distutils.util import strtobool
@@ -106,6 +107,9 @@ def parse_opt():
     
     parser.add_argument('--save_weights', type=lambda b:bool(strtobool(b)), nargs='?', const=False, default=False,
                         help='save weights locally.')
+    
+    parser.add_argument('--force_clip', type=lambda b:bool(strtobool(b)), nargs='?', const=False, default=False,
+                        help='force clip pre-processor.')
         
     # ----------------------------------------------------------------
 
@@ -131,6 +135,7 @@ class Pipeline():
         self.val_data = data['val']
         self.test_data = data['test']
         self.root_dir = data['path']
+        self.class_dict = data['names']
 
         self.architecture = arch['architecture']
         self.out_features = arch['out_features']
@@ -156,20 +161,46 @@ class Pipeline():
 
     def fit(self):
 
-        train_data_loader = batch_loader(csv_file=self.train_data, root_dir=self.root_dir, transform=self.train_transform, job_type = self.arch['job_type'],
-                                         batch_size=self.batch_size, num_workers=self.num_workers, shuffle=True, generator=None, worker_init_fn=None)
+        model = make_model(architecture=self.architecture,
+                        out_features=self.out_features, 
+                        weights=self.arch['weights'] if self.arch['weights'] != 'None' else None, 
+
+                        template_name = self.arch['templates'],
+                        freeze_encoder = self.arch['freeze_encoder'],
+                        class_dict = self.class_dict,
+                        device=self.device)
         
-        val_data_loader = batch_loader(csv_file=self.val_data, root_dir=self.root_dir, transform=self.inference_transform, job_type = self.arch['job_type'],
-                                         batch_size=self.batch_size, num_workers=self.num_workers, shuffle=False, generator=None, worker_init_fn=None)
+        # Check clip model
+        if self.opt.force_clip or self.architecture in clip_available_models():
+            logger.info("Using CLIP model pre-processors")
+            is_clip = True
+        else:
+            is_clip = False
+
+        if is_clip:
+            self.train_transform = model.val_preprocess if self.arch['freeze_encoder'] else model.train_preprocess
+            self.inference_transform = model.val_preprocess
+
+        train_data_loader = batch_loader(csv_file=self.train_data, root_dir=self.root_dir, 
+                                        transform=self.train_transform, 
+                                        job_type = self.arch['job_type'],
+                                        batch_size=self.batch_size, 
+                                        num_workers=self.num_workers, 
+                                        shuffle=True, generator=None, worker_init_fn=None,
+                                        is_clip = is_clip)
+        
+        val_data_loader = batch_loader(csv_file=self.val_data, root_dir=self.root_dir, 
+                                        transform=self.inference_transform, 
+                                        job_type = self.arch['job_type'],
+                                        batch_size=self.batch_size, num_workers=self.num_workers, 
+                                        shuffle=False, generator=None, worker_init_fn=None,
+                                        is_clip = is_clip)
         
         if self.test_data is not None:
             test_data_loader = batch_loader(csv_file=self.test_data, root_dir=self.root_dir, transform=self.inference_transform, job_type = self.arch['job_type'],
-                                         batch_size=self.batch_size, num_workers=self.num_workers, shuffle=False, generator=None, worker_init_fn=None)
+                                         batch_size=self.batch_size, num_workers=self.num_workers, shuffle=False, generator=None, worker_init_fn=None, is_clip = is_clip)
         else:
             test_data_loader = None
-            
-        model = make_model(architecture=self.architecture,
-                        out_features=self.out_features, weights=self.arch['weights'] if self.arch['weights'] != 'None' else None, device=self.device)
         
         logger.info(f"Optim: {self.hyps['optim']}, lr: {float(self.hyps['max_lr'])}, decay: {float(self.hyps['weight_decay'])}, momentum: {float(self.hyps['momentum'])}")
         optimizer = make_optimizer(
