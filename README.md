@@ -10,6 +10,8 @@ This project is a comprehensive PyTorch-based training pipeline designed for **m
 
 - **Customizable Architecture**: Configure your network architecture by editing the `architecture_template.yaml` file in the config folder. You can select an architecture and adjust the number of output features and job types to match your specific classification problem.
 
+- **CLIP as zero-shot | fine-tune**: Use CLIP models to create zero-shot classifiers and fine-tune in your custom dataset.
+
 - **Data Configuration**: Specify the path to your dataset and the associated CSV files in the `data_template.yaml` file. These CSV files should contain image paths relative to the dataset path and their corresponding numerical labels.
 
 - **Hyperparameter Tuning**: Customize training and evaluation hyperparameters in the `hyps_template.yaml` file to fine-tune your model's performance.
@@ -129,6 +131,7 @@ Refer to the parameter descriptions within the script for more details on each o
 | --top_k             | K for top_k precision (e.g., if 2, will use the top 2 confidence classes to compute confusion) |
 | --num_samples       | Number of samples to calculate precision@K             |
 | --balance_weights   | Set custom weights for loss calculation based on class imbalance |
+| --force_clip		  | force clip pre-processor (for clip models only) |
 
 ## Project Status and Contributions
 
@@ -164,6 +167,7 @@ Refer to the parameter descriptions within the script for more details on each o
 - [X] Architectures
 	- [X] resnet ::
 	- [X] efficientnet ::
+	- [X] clip encoder ::
 
 - [X] Torchmetrics
 	- [X] Confusion Matrix
