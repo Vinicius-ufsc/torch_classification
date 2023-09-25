@@ -64,18 +64,18 @@ To get started, follow these steps:
 
         |image_name| label |
         |-----------------------|------------|
-        |train\class1_image1.png |0 |
-        |train\class1_image2.png |0 |
-        |train\class2.image1.png |1 |
+        |train\class1\img1.png |0 |
+        |train\class1\img2.png |0 |
+        |train\class2\img1.png |1 |
         |... |... |
 
 		</td><td>
 
 		|image_name| label_1 | label_2 | label_3 | ...|
         |----------|---------|---------|----------|---|
-        |train\class1_image1.png |0 |1 |0 |...|
-        |train\class1_image2.png |0 |1 |1 |...|
-        |train\class2.image1.png |1 |1 |0 |...|
+        |train\class1\img1.png |0 |1 |0 |...|
+        |train\class1\img2.png |0 |1 |1 |...|
+        |train\class2\img1.png |1 |1 |0 |...|
         |...                    |...|...|...|...|
 
 		</td></tr> </table>
