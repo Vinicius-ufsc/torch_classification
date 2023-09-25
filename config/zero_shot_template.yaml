@@ -1,0 +1,6 @@
+# zero-shot class dict, for utils/zero-shot.py usage.
+
+names:
+  0: class1
+  1: class2
+  2: class2
