@@ -54,12 +54,27 @@ To get started, follow these steps:
 
         >image path relative to dataset path, numerical label
 
+		<table>
+		<tr><th>Multiclass </th><th>Multilabel </th></tr>
+		<tr><td>
+
         |image_name| label |
         |-----------------------|------------|
         |train\class1_image1.png |0 |
         |train\class1_image2.png |0 |
         |train\class2.image1.png |1 |
         |... |... |
+
+		</td><td>
+
+		|image_name| label_1 | label_2 | label_3 | ...|
+        |----------|---------|---------|----------|---|
+        |train\class1_image1.png |0 |1 |0 |...|
+        |train\class1_image2.png |0 |1 |1 |...|
+        |train\class2.image1.png |1 |1 |0 |...|
+        |...                    |...|...|...|...|
+
+		</td></tr> </table>
 
     - here is an example of dataset folder structure:
 
