@@ -24,10 +24,10 @@ def parse_opt():
     parser.add_argument('--name', type=str, default='zero_shot_model',
                     help='model name.')
     
-    parser.add_argument('--yaml_path', type=str, default='zero_shot',
+    parser.add_argument('--yaml_path', type=str, default='zero_shot_template',
                         help='class yaml dictionary file path.')
     
-    parser.add_argument('--templates', type=str, default='fashion_templates',
+    parser.add_argument('--templates', type=str, default='simple_template',
                         help='templates file path.')
     
     parser.add_argument('--freeze_encoder', type=lambda b:bool(strtobool(b)), nargs='?', const=False, default=False,
