@@ -171,8 +171,12 @@ class Pipeline():
                         device=self.device)
         
         # Check clip model
-        if self.opt.force_clip or self.architecture in clip_available_models():
+        # if self.opt.force_clip or self.architecture in clip_available_models():
+
+        if self.opt.force_clip:
             logger.info("Using CLIP model pre-processors")
+            if self.architecture in clip_available_models():
+                logger.warning(f'⚠️ Image size must match {self.architecture} input size. ')
             is_clip = True
         else:
             is_clip = False
