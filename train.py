@@ -175,11 +175,12 @@ class Pipeline():
 
         if self.opt.force_clip:
             logger.info("Using CLIP model pre-processors")
-            if self.architecture in clip_available_models():
-                logger.warning(f'⚠️ Image size must match {self.architecture} input size. ')
             is_clip = True
         else:
             is_clip = False
+
+        if self.architecture in clip_available_models():
+            logger.warning(f'⚠️ Image size must match {self.architecture} input size.')
 
         if is_clip:
             self.train_transform = model.val_preprocess if self.arch['freeze_encoder'] else model.train_preprocess
