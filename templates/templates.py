@@ -3,6 +3,10 @@ class Templates:
 
         # define your custom template here
 
+        self.none = [
+            lambda c: f'{c}'
+        ]
+
         self.custom_template = []
 
         self.simple_template = [
@@ -94,6 +98,8 @@ class Templates:
 
         self.fashion_templates = [
             lambda c: f'a photo of a {c}.',
+            lambda c: f'a photo of someone wearing a {c}.',
+            lambda c: f'an image that shows a {c}.',
             lambda c: f'a vitrine photo of a {c}.',
             lambda c: f'a cropped photo of a {c}.',
             lambda c: f'a photo of one {c}.',
