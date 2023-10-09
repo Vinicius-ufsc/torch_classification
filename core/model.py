@@ -21,14 +21,20 @@ logger.addHandler(sh)
 
 # num_classes, architecture
 
+# TODO add possibility to load model from path 
 def make_model(architecture, #  clip model path or model architecture name 
                out_features, 
                class_dict, # clip
                weights="DEFAULT", 
                template_name = 'simple_template', # clip
                freeze_encoder = False, # clip
+               load_from_path = False,
                device='cuda'
                ):
+    
+    if load_from_path:
+        model = torch.load(architecture).to(device)
+        return model
     
     if architecture in list_models():
         model = get_model_from_torchvision(architecture = architecture, 
@@ -97,7 +103,8 @@ def get_clip_classifier_from_pretrained(clip_path,
                                         class_dict, 
                                         templates,
                                         freeze_encoder = False,
-                                        classification_head = None, 
+                                        classification_head = None,
+                                        keep_lang = False, 
                                         device = 'cuda'):
 
     # create a torch.nn.Module that combines CLIP image encoder with a linear classifier
@@ -112,6 +119,7 @@ def get_clip_classifier_from_pretrained(clip_path,
         templates {str} : name of the template to use.
         freeze_encoder {bool} : freeze encoder weights.
         classification_head {torch.nn.Module} : classification head to use, if None, create a new one.
+        keep_lang {bool} : keep text_encoder.
         device {str} : 'cuda' to use GPU or 'cpu' to use CPU. 
     """
 
@@ -134,7 +142,7 @@ def get_clip_classifier_from_pretrained(clip_path,
     else:
         pass
 
-    image_encoder = ImageEncoder(model = clip_path, device = device, keep_lang=False)
+    image_encoder = ImageEncoder(model = clip_path, device = device, keep_lang=keep_lang)
 
     image_classifier = ImageClassifier(image_encoder = image_encoder, 
                                     classification_head = classification_head, 
