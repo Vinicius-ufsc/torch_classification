@@ -126,7 +126,7 @@ class DataloaderCsv(Dataset):
     def __init__(self, csv_file: str, root_dir: str,  transform=None, 
                  job_type='multiclass', is_clip = False):
 
-        self.data = pd.read_csv(os.path.join(root_dir, csv_file)) 
+        self.data = pd.read_csv(csv_file)
         self.root_dir = Path(root_dir)
         self.transform = transform
         self.job_type = job_type
