@@ -18,6 +18,7 @@ sh = logging.StreamHandler()
 sh.setFormatter(logging.Formatter(
     '%(name)s - %(levelname)s - %(message)s')) # %(asctime)s - 
 logger.addHandler(sh)
+logger.setLevel(20)
 
 # num_classes, architecture
 
@@ -27,7 +28,7 @@ def make_model(architecture, #  clip model path or model architecture name
                class_dict, # clip
                weights="DEFAULT", 
                template_name = 'simple_template', # clip
-               freeze_encoder = False, # clip
+               freeze_encoder = False,
                load_from_path = False,
                device='cuda'
                ):
@@ -39,6 +40,7 @@ def make_model(architecture, #  clip model path or model architecture name
     if architecture in list_models():
         model = get_model_from_torchvision(architecture = architecture, 
                                            out_features = out_features, 
+                                           freeze_encoder = freeze_encoder,
                                            weights = weights, 
                                            device = device)
         logger.info(f"Using torchvision model: {architecture}")
@@ -65,6 +67,7 @@ def make_model(architecture, #  clip model path or model architecture name
 
 def get_model_from_torchvision(architecture, 
                out_features, 
+               freeze_encoder,
                weights="DEFAULT", 
                device='cuda'):
     """
@@ -81,6 +84,11 @@ def get_model_from_torchvision(architecture,
 
     model = get_model(architecture, weights=weights)
 
+    if freeze_encoder:
+        logger.info('Freezing encoder weights.')
+        for param in model.parameters():
+            param.requires_grad = False
+
     # change last layer.
     if 'resnet' in architecture:
         model.fc = torch.nn.Linear(
@@ -89,11 +97,11 @@ def get_model_from_torchvision(architecture,
     if 'efficientnet' in architecture:
         model.classifier[1] = nn.Linear(
             in_features=model.classifier[1].in_features, out_features=out_features)
-
+        
     model = model.to(device)
 
     if False:
-        summary(model, (3, 160, 160))
+        summary(model, (3, 224, 224))
 
     return model
 
