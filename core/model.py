@@ -93,11 +93,18 @@ def get_model_from_torchvision(architecture,
     if 'resnet' in architecture:
         model.fc = torch.nn.Linear(
             in_features=model.fc.in_features, out_features=out_features, bias=True)
-
-    if 'efficientnet' in architecture:
+    elif 'efficientnet' in architecture:
         model.classifier[1] = nn.Linear(
-            in_features=model.classifier[1].in_features, out_features=out_features)
-        
+        in_features=model.classifier[1].in_features, out_features=out_features)
+    else:
+        try:
+            model.fc = torch.nn.Linear(
+            in_features=model.fc.in_features, out_features=out_features, bias=True)
+        except:
+            logger.debug(f'summary:')
+            summary(model, (3, 224, 224))
+            raise Exception(f"Can't change last layer of {architecture}.")
+
     model = model.to(device)
 
     if False:
