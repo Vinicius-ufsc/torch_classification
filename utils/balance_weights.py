@@ -4,21 +4,21 @@ import torch
 
 def return_weights(csv_file, job_type, device='cuda'):
         """
-        return torch.tensor with balanced weights for train dataset.
+        return torch.tensor with balanced weights using the inverse frequency.
         """
 
         data = pd.read_csv(csv_file)
 
         match job_type:
+            
                 case 'multiclass':
-                        # ! TODO corrigir para o caso multiclass.
-                        print('warning: check implementation for multiclass')
-                        print('! TODO fix for multiclass')
+                    
                         labels = data.iloc[:, 1].to_numpy()
 
                         counter = Counter(labels)
                         num_samples = sum(counter.values())
-                        weights = 1 - (torch.tensor(list(counter.values()), device=device, dtype=torch.float32) / num_samples)
+                        weights = num_samples / (torch.tensor(list(counter.values()), device=device, dtype=torch.float32))
+                        print('weights:', weights)
 
                 case 'multilabel':
                         data = data.iloc[: , 1:]
@@ -29,6 +29,7 @@ def return_weights(csv_file, job_type, device='cuda'):
 
                         weights = negativas / positivas
                         weights = torch.tensor(weights, device=device, dtype=torch.float32)
+                        print('weights:', weights)
                 
                 case _:
                         raise ValueError("job_type not defined")
