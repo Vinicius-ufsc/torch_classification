@@ -133,6 +133,8 @@ Refer to the parameter descriptions within the script for more details on each o
 | --top_k             | K for top_k precision (e.g., if 2, will use the top 2 confidence classes to compute confusion) |
 | --num_samples       | Number of samples to calculate precision@K             |
 | --balance_weights   | Set custom weights for loss calculation based on class imbalance |
+| --warmup_epochs     | Warming up epochs for model fine-tune |
+| --warmup_lr         | Optimizer learning rate for warming up |
 | --force_clip		  | Force clip pre-processor (for clip models only) |
 
 ### Zero-shot classification
@@ -229,6 +231,8 @@ Refer to the parameter descriptions within the script for more details on each o
 		- [X] Metrics curves
 		- [X] Plot confusion matrix
 		- [ ] Plot metrics bar
+    
+- [X] Warm up
 
 - [X] Device agnostic
 
