@@ -18,6 +18,8 @@ from utils.txt_messages import PIPE_TXT, WHITE_TXT, GOLDEN_TXT ,CLEAR_TXT
 from utils.common import mkdir
 from utils.val import val
 
+from utils.humanize import human_readable_number
+
 
 os.environ["WANDB_SILENT"]="true"
 
@@ -33,6 +35,13 @@ sh = logging.StreamHandler()
 sh.setFormatter(logging.Formatter(
     '%(name)s - %(levelname)s - %(message)s')) # %(asctime)s -
 logger.addHandler(sh)
+
+
+def count_parameters(model):
+    trainable = sum(p.numel() for p in model.parameters() if p.requires_grad)
+    non_trainable = sum(p.numel() for p in model.parameters() if p.requires_grad is False)
+    total = trainable + non_trainable
+    return total, trainable, non_trainable
 
 def train(conf: dict, opt, hyps : dict, arch : dict, wandb_conf : dict, state : dict):
 
@@ -111,9 +120,44 @@ def train(conf: dict, opt, hyps : dict, arch : dict, wandb_conf : dict, state : 
 
         if tracker.last_epoch != 0:
             logger.warning(f'\nResuming training from epoch: {tracker.last_epoch}\n')
+            
+        # warmup info
+        total, trainable, non_trainable = count_parameters(model)
+        # logger.info(f'total : {human_readable_number(total)}')
+        # logger.info(f'trainable : {human_readable_number(trainable)}')
+        # logger.info(f'non_trainable : {human_readable_number(non_trainable)}')
 
         for epoch in range(tracker.last_epoch ,opt.epochs):  # opt.epochs
+            
+            # * warmup
+            if opt.warmup_epochs > 0:
+                
+                # * end of warmup
+                if epoch == opt.warmup_epochs:
 
+                    logger.info('Unfreezing model.')
+                    for param in model.parameters():
+                        param.requires_grad = True
+                    
+                    optimizer.param_groups[0]['lr'] = float(hyps['max_lr'])
+                    logger.info(f'fine-tune learning rate: {optimizer.param_groups[0]["lr"]}')
+                    
+                    total, trainable, non_trainable = count_parameters(model)
+                    logger.info(f'total : {human_readable_number(total)}')
+                    logger.info(f'trainable : {human_readable_number(trainable)}')
+                    logger.info(f'non_trainable : {human_readable_number(non_trainable)}')
+                
+                elif epoch < opt.warmup_epochs:
+                    logger.info(f'warming up {epoch+1}/{opt.warmup_epochs}')
+                    optimizer.param_groups[0]['lr'] = opt.warmup_lr
+                    logger.info(f'warmup learning rate: {optimizer.param_groups[0]["lr"]}')
+                    if epoch == 0:
+                        logger.info(f'total : {human_readable_number(total)}')
+                        logger.info(f'trainable : {human_readable_number(trainable)}')
+                        logger.info(f'non_trainable : {human_readable_number(non_trainable)}')
+                else:
+                    pass
+                    
             # * on_train_epoch_start
             # start metrics.
             metrics = ComputeMetrics(out_features = arch['out_features'], 

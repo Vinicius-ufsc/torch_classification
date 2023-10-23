@@ -110,7 +110,13 @@ def parse_opt():
     
     parser.add_argument('--force_clip', type=lambda b:bool(strtobool(b)), nargs='?', const=False, default=False,
                         help='force clip pre-processor.')
-        
+    
+    parser.add_argument('--warmup_epochs', type=int, default=0,
+                        help='warmup epochs for model fine tuning.')
+    
+    parser.add_argument('--warmup_lr', type=float, default=0.003,
+                    help='optimizer lr for warming up')
+    
     # ----------------------------------------------------------------
 
     parser.add_argument('--top_k', type=int, default=3,
@@ -166,7 +172,7 @@ class Pipeline():
                         weights=self.arch['weights'] if self.arch['weights'] != 'None' else None, 
 
                         template_name = self.arch['templates'],
-                        freeze_encoder = self.arch['freeze_encoder'],
+                        freeze_encoder = self.arch['freeze_encoder'] if self.opt.warmup_epochs == 0 else True,
                         class_dict = self.class_dict,
                         device=self.device)
         
@@ -209,7 +215,7 @@ class Pipeline():
         
         logger.info(f"Optim: {self.hyps['optim']}, lr: {float(self.hyps['max_lr'])}, decay: {float(self.hyps['weight_decay'])}, momentum: {float(self.hyps['momentum'])}")
         optimizer = make_optimizer(
-            model=model, learning_rate=float(self.hyps['max_lr']), optim=self.hyps['optim'],
+            model = model, learning_rate=float(self.hyps['max_lr']), optim=self.hyps['optim'],
             weight_decay=float(self.hyps['weight_decay']), momentum=float(self.hyps['momentum']))
 
         # calculate weights for loss function.
