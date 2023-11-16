@@ -1,0 +1,52 @@
+description: sweep to find best optimizer parameters along with best normalization parameters.
+method: bayes
+metric:
+  goal: maximize
+  name: val_mean_ap
+name: EfficientNet_v2_S
+parameters:
+  logging:
+    value: 20
+  arch:
+    value: architecture
+  warmup_epochs:
+    value: 2
+  warmup_lr:
+    value: 0.002
+  balance_weights:
+    values:
+      - true
+      - false
+  batch_size:
+    value: 128
+  data:
+    value: data
+  epochs:
+    value: 30
+  fast_mode:
+    value: true
+  hyps:
+    values:
+      - hyps_low
+      - hyps_medium
+      - hyps_high
+  max_lr:
+    distribution: uniform
+    max: 2e-04
+    min: 5e-06
+  min_lr:
+    value: 2e-07
+  momentum:
+    distribution: uniform
+    max: 0.999
+    min: 0.9
+  patience:
+    value: 4
+  weight_decay:
+    distribution: uniform
+    max: 0.001
+    min: 0.0001
+  workers:
+    value: 8
+program: train.py
+project: SWEEP_EfficientNet_v2_S_DFS5
