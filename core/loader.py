@@ -148,7 +148,7 @@ class DataloaderCsv(Dataset):
         # re scaling to [0,1] to match resnet input format (review)
         # https://pytorch.org/vision/main/models/generated/torchvision.models.resnet18.html
 
-        if self.is_clip:
+        if True: # FOR VIT MODELS (mesmo os do pytorch que fala que foi normalizado [0,1]!).
             image = cv.cvtColor(cv.imread(img_path), cv.COLOR_BGR2RGB).astype(np.float32)
         else:
             image = (cv.cvtColor(cv.imread(img_path), cv.COLOR_BGR2RGB) / 255.0).astype(np.float32)
