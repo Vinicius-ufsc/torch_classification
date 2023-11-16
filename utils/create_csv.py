@@ -51,7 +51,7 @@ def main(args):
         classes = dict(enumerate(class_names))
     
     with ThreadPoolExecutor(max_workers=args.workers) as executor:
-        for set_ in ['train', 'test', 'val']:
+        for set_ in ['train', 'test', 'val', 'train_1k', 'train_1k_stratified']:
             dataset_folder = os.path.join(root_dir, set_)
             results = list(tqdm(executor.map(process_class, classes.keys(), classes.values(),
                                               [dataset_folder] * len(classes), [set_] * len(classes)),
