@@ -1,0 +1,50 @@
+description: sweep to find best optimizer parameters along with best normalization parameters.
+method: bayes
+metric:
+  goal: maximize
+  name: val_mean_ap
+name: ViT_B_16_OpenAI
+parameters:
+  logging:
+    value: 20
+  arch:
+    value: architecture
+  warmup_epochs:
+    value: 2
+  warmup_lr:
+    value: 0.00002
+  balance_weights:
+    value: false
+  batch_size:
+    value: 128
+  data:
+    value: data
+  epochs:
+    value: 30
+  fast_mode:
+    value: true
+  hyps:
+    values:
+      - hyps_clip_low
+      - hyps_clip_medium
+      - hyps_clip_high
+  max_lr:
+    value: 2e-06
+  min_lr:
+    value: 1e-08
+  momentum:
+    distribution: uniform
+    max: 0.999
+    min: 0.9
+  patience:
+    value: 4
+  weight_decay:
+    distribution: uniform
+    max: 0.001
+    min: 0.0001
+  workers:
+    value: 8
+  save_weights:
+    value: false
+program: train.py
+project: SWEEP_ViT_B_16_OpenAI_DFS5
