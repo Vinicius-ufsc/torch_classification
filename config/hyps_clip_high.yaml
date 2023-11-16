@@ -1,0 +1,20 @@
+# Training hyperparameter
+
+# optimizer hyperparameter
+optim: AdamW
+weight_decay: 0
+momentum: 0.937
+max_lr: 2e-5
+min_lr: 2e-7
+lr_scheduler: OneCycleLR # [ReduceLROnPlateau, CosineAnnealingLR, OneCycleLR]
+pursuit_metric : ap # [precision, recall, f1_score, accuracy, ap, precision_k], metric to be persuit during training. early stopping and best model will follow this metrics value.
+better : max #  [max, min], mode to account values of the chosen metric.
+# data augmentation hyperparameter
+Resize: [224, 2] # [image size for training, interpolation mode], 1(Default):cv2.INTER_LINEAR (BILINEAR), 2:cv.INTER_CUBIC (BICUBIC).
+Normalize : [[0.48145466, 0.4578275, 0.40821073], [0.26862954, 0.26130258, 0.27577711], 1] # [mean, std, probability]
+RandomHorizontalFlip: 0.5  # horizontal flip (probability) range 0-1.
+RandomAffine: [0.05, [0.9, 0.99], [-20,20] , 0.35] # [translate_percent=(float), scale=(float,float), rotate=(float,float) probability]
+ColorJitter: [0.12, 0.12, 0.05, 0.1, 0.25] # [brightness, contrast, saturation, hue, probability]
+RandomPerspective: [[0.20,0.25], 0.25] # [distortion_scale, probability]
+GaussianBlur : [[2, 3], [0.1, 1.1], 0.1] # [blur_limit, sigma_limit=(float, float), probability]
+RandomAdjustSharpness: [[0.1, 0.25], [0.5, 1.0], 0.2] # [alpha, lightness ,probability]
