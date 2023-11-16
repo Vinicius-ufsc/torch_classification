@@ -14,11 +14,14 @@ def make_optimizer(model, learning_rate=1e-3, optim='Adam', weight_decay=0.0005,
         momentum {float}: momentum.
     """
 
-    assert optim in ['Adam', 'SGD', 'RMSprop'], 'optimizers available: Adam, SGD, RMSprop'
+    assert optim in ['Adam', 'SGD', 'RMSprop', 'AdamW'], 'optimizers available: Adam, SGD, RMSprop'
 
     match optim:
         case 'Adam':
             optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate,
+                                         weight_decay=weight_decay, betas=(momentum, 0.999))
+        case 'AdamW':
+            optimizer = torch.optim.AdamW(model.parameters(), lr=learning_rate,
                                          weight_decay=weight_decay, betas=(momentum, 0.999))
         case 'SGD':
             optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate,
