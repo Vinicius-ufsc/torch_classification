@@ -49,7 +49,7 @@ def train(conf: dict, opt, hyps : dict, arch : dict, wandb_conf : dict, state : 
     wandb.login(key=wandb_conf['key'])
 
     # merging the configuration dictionaries to log into wandb.
-    wandb_config = conf | hyps | arch | wandb_conf | vars(opt)
+    wandb_config = conf | hyps | arch | wandb_conf | vars(opt) | state
 
     with wandb.init(project=wandb_conf['project'], config=wandb_config, 
                     name=wandb_conf['name'], mode=opt.mode, 
@@ -64,6 +64,21 @@ def train(conf: dict, opt, hyps : dict, arch : dict, wandb_conf : dict, state : 
             
         if wandb_conf['analytic_files'] is True:
             analytic_artifact = wandb.Artifact(f'analysis', type="files")
+            
+        # upload dataloader
+        files_artifact = wandb.Artifact('files', type="files")
+        # Add file
+        files_artifact.add_file(os.path.join(os.getcwd(), 'core', 'criterion.py'))
+        files_artifact.add_file(os.path.join(os.getcwd(), 'core', 'loader.py'))
+        files_artifact.add_file(os.path.join(os.getcwd(), 'core', 'model.py'))
+        files_artifact.add_file(os.path.join(os.getcwd(), 'core', 'optimizer.py'))
+                                
+        files_artifact.add_file(os.path.join(os.getcwd(), 'config', 'data.yaml'))
+        files_artifact.add_file(os.path.join(os.getcwd(), 'config', 'architecture.yaml'))
+        files_artifact.add_file(os.path.join(os.getcwd(), 'config', 'wandb.yaml'))
+        files_artifact.add_file(os.path.join(os.getcwd(), 'config', opt.hyps + '.yaml'))
+        # finalize artifact.
+        run.log_artifact(files_artifact)
 
         # setting logger level.
         logger.setLevel(opt.logging)
@@ -72,6 +87,12 @@ def train(conf: dict, opt, hyps : dict, arch : dict, wandb_conf : dict, state : 
         torch.backends.cudnn.benchmark = True
 
         model, criterion, optimizer, loader = conf['model'], conf['criterion'], conf['optimizer'], conf['train_loader']
+        
+        if opt.resume:
+            logger.info('Loading model weights [TCC ONLY]')
+            model.load_state_dict(torch.load('/home/vinicius-cin/torch_classification/runs/ViT-B/16_OpenAI_BEST_HYPER_66/weights/best.model'))
+            logger.info('Weights loaded with success!')
+        
 
         # * get run name.
         mkdir('runs')
@@ -94,10 +115,10 @@ def train(conf: dict, opt, hyps : dict, arch : dict, wandb_conf : dict, state : 
             # setting same run name as previous.
             run_name = state['run_name']
             # load tracker with resume state.
-            tracker = PerformanceTracker(mode = hyps['better'], save_dir=os.path.join('runs', run_name), 
+            tracker = PerformanceTracker(mode = hyps['better'], save_dir=os.path.join(os.getcwd(),'runs', run_name), 
                                          save = wandb_conf['upload_weights'] or opt.save_weights , state = state, verbose=False)
         else:
-            tracker = PerformanceTracker(mode = hyps['better'], save_dir=os.path.join('runs', run_name), 
+            tracker = PerformanceTracker(mode = hyps['better'], save_dir=os.path.join(os.getcwd(), 'runs', run_name), 
                                          save = wandb_conf['upload_weights'] or opt.save_weights, verbose=False)
         
         # * end on_train_setup
