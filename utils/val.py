@@ -133,11 +133,14 @@ import albumentations as A
 def create_error_analysis_table(table, zipped_data, classes, ea_conf, task = 'multiclass', fast_mode = False):
 
     for name, image, original_width, original_height, aspect_ratio, resolution, label, prediction, output in zipped_data:
+        
+        # logger.critical(f'output size: {output.size()}')
 
         if task == 'multilabel':
             output = torch.sigmoid(output)
         elif task == 'multiclass':
-            output = softmax(output, dim=1)
+            # ALTERADO PARA None
+            output = softmax(output, dim=None)
 
         descending_args_id = list(torch.argsort(output))[::-1]
 
