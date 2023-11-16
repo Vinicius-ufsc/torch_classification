@@ -96,6 +96,9 @@ def get_model_from_torchvision(architecture,
     elif 'efficientnet' in architecture:
         model.classifier[1] = nn.Linear(
         in_features=model.classifier[1].in_features, out_features=out_features)
+    elif 'vit_' in architecture:
+        model.heads = nn.Linear(
+        in_features=model.heads.head.in_features, out_features=out_features)
     else:
         try:
             model.fc = torch.nn.Linear(
@@ -103,12 +106,25 @@ def get_model_from_torchvision(architecture,
         except:
             logger.debug(f'summary:')
             summary(model, (3, 224, 224))
+            summary(model = model, 
+                    input_size=(4, 3, 224, 224), # make sure this is "input_size", not "input_shape"
+                    # col_names=["input_size"], # uncomment for smaller output
+                    col_names=["input_size", "output_size", "num_params", "trainable"],
+                    col_width=20,
+                    row_settings=["var_names"])
+            
             raise Exception(f"Can't change last layer of {architecture}.")
 
     model = model.to(device)
 
-    if False:
-        summary(model, (3, 224, 224))
+    if True:
+        logger.info(f'Model summary:')
+        # summary(model = model, 
+        #             input_size=(4, 3, 224, 224), # make sure this is "input_size", not "input_shape"
+        #             # col_names=["input_size"], # uncomment for smaller output
+        #             col_names=["input_size", "output_size", "num_params", "trainable"],
+        #             col_width=20,
+        #             row_settings=["var_names"])
 
     return model
 
@@ -144,6 +160,10 @@ def get_clip_classifier_from_pretrained(clip_path,
 
         zero_shot, processor_train, processor_val = clip.load(name = clip_path, device = device, 
                                                             jit=False, is_train=False, pretrained=True)
+        
+        print(processor_val)
+        print()
+        print(processor_train)
         
         classification_head = get_zeroshot_classifier(clip_model = zero_shot, 
                             template = templates, 
