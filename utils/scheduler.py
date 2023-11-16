@@ -8,7 +8,7 @@ def get_scheduler(optimizer, hyps, verbose = False):
         case 'ReduceLROnPlateau':
             # patience: Number of epochs with no improvement after which learning rate will be reduced.
             scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode=hyps['better'],
-                                    factor=0.1, patience=5,
+                                    factor=0.1, patience=4,
                                     threshold=0.0001, threshold_mode='rel', 
                                     cooldown=0, min_lr=float(hyps['min_lr']), eps=1e-08, verbose=verbose)
             
