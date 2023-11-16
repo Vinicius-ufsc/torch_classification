@@ -64,6 +64,22 @@ def train(conf: dict, opt, hyps : dict, arch : dict, wandb_conf : dict, state : 
             
         if wandb_conf['analytic_files'] is True:
             analytic_artifact = wandb.Artifact(f'analysis', type="files")
+            
+            
+        # upload dataloader
+        files_artifact = wandb.Artifact('files', type="files")
+        # Add file
+        files_artifact.add_file(os.path.join(os.getcwd(), 'core', 'criterion.py'))
+        files_artifact.add_file(os.path.join(os.getcwd(), 'core', 'loader.py'))
+        files_artifact.add_file(os.path.join(os.getcwd(), 'core', 'model.py'))
+        files_artifact.add_file(os.path.join(os.getcwd(), 'core', 'optimizer.py'))
+                                
+        files_artifact.add_file(os.path.join(os.getcwd(), 'config', 'data.yaml'))
+        files_artifact.add_file(os.path.join(os.getcwd(), 'config', 'architecture.yaml'))
+        files_artifact.add_file(os.path.join(os.getcwd(), 'config', 'wandb.yaml'))
+        files_artifact.add_file(os.path.join(os.getcwd(), 'config', opt.hyps + '.yaml'))
+        # finalize artifact.
+        run.log_artifact(files_artifact)
 
         # setting logger level.
         logger.setLevel(opt.logging)
